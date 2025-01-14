@@ -4,8 +4,11 @@ import { Text, View, ScrollView, Image } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { images } from "../constants"
 import CustomButton from "../components/CustomButton"
+import { useState } from "react"
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(false)
+
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView contentContainerStyle={{ height: "100%" }}>
@@ -40,7 +43,7 @@ export default function App() {
             handlePress={() => router.push("/sign-in")}
             containerStyles="w-full m-7"
             textStyles=""
-            isLoading
+            isLoading={isLoading}
           ></CustomButton>
         </View>
       </ScrollView>
