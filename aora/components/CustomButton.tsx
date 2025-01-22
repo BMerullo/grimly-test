@@ -1,5 +1,4 @@
 import { View, Text, TouchableOpacity } from "react-native"
-import { FC } from "react"
 
 interface CustomButtonProps {
   title: string

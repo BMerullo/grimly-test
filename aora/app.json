@@ -10,13 +10,15 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "package": "com.bjm.aoro"
+      "package": "com.bjm.aoro",
+      "bundleIdentifier": "com.anonymous.aora"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.aora"
     },
     "web": {
       "bundler": "metro",
