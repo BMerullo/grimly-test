@@ -17,6 +17,16 @@ export const config = {
   storageId: "6785ed1c0007e266ed2d",
 }
 
+const {
+  endpoint,
+  platform,
+  projectId,
+  databaseId,
+  userCollectionId,
+  videoCollectionId,
+  storageId,
+} = config
+
 const client = new Client()
 
 client
@@ -108,8 +118,8 @@ export const getCurrentUser = async (): Promise<DBUser | null> => {
     if (!currentAccount) throw new Error("No current account found")
 
     const currentUser = await databases.listDocuments(
-      config.databaseId,
-      config.userCollectionId,
+      databaseId,
+      userCollectionId,
       [Query.equal("accountId", currentAccount.$id)]
     )
 
@@ -121,5 +131,14 @@ export const getCurrentUser = async (): Promise<DBUser | null> => {
   } catch (error) {
     console.error("Error fetching current user:", error)
     return null // Return null in case of an error
+  }
+}
+
+export const getAllPosts = async () => {
+  try {
+    const posts = await databases.listDocuments(databaseId, videoCollectionId)
+    return posts.documents
+  } catch (error) {
+    throw new Error(error as string)
   }
 }

@@ -1,18 +1,16 @@
-import { View, Text, FlatList, Image } from "react-native"
-import React, { useState } from "react"
+import { View, Text, FlatList, Image, Alert } from "react-native"
+import React, { useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { images } from "../../constants"
 import SearchInput from "@/components/SearchInput"
 import Trending from "@/components/Trending"
 import EmptyState from "@/components/EmptyState"
+import VideoCard from "@/components/VideoCard"
 import { RefreshControl } from "react-native-gesture-handler"
+import { getAllPosts } from "@/lib/appwrite"
+import useAppwrite from "@/lib/useAppwrite"
 
 interface Item {
-  id: number
-  $id: string
-}
-
-interface Post {
   id: number
   $id: string
 }
@@ -21,34 +19,41 @@ interface EmptySpace {
   title: string
 }
 
+interface Error {
+  error: string
+}
+
 const Home = () => {
+  const { data: posts, refetch } = useAppwrite({ fn: getAllPosts })
+
   const [refreshing, setRefreshing] = useState(false)
 
   const onRefresh = async () => {
     setRefreshing(true)
+    await refetch()
     setRefreshing(false)
   }
 
-  const data: Item[] = [
-    { id: 1, $id: "1" },
-    { id: 2, $id: "2" },
-    { id: 3, $id: "3" },
-  ]
+  console.log(posts)
 
-  const posts: Post[] = [
-    { id: 1, $id: "1" },
-    { id: 2, $id: "2" },
-    { id: 3, $id: "3" },
-  ]
+  // const data: Item[] = [
+  //   { id: 1, $id: "1" },
+  //   { id: 2, $id: "2" },
+  //   { id: 3, $id: "3" },
+  // ]
+
+  // const posts: Post[] = [
+  //   { id: 1, $id: "1" },
+  //   { id: 2, $id: "2" },
+  //   { id: 3, $id: "3" },
+  // ]
 
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList
-        data={data}
+        data={posts}
         keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => (
-          <Text className="text-3xl text-white">{item.id}</Text>
-        )}
+        renderItem={({ item }) => <VideoCard video={item} />}
         ListHeaderComponent={() => (
           <View className="my-6 px-4 space-y-6">
             <View className="justify-between items-start flex-row mb-6">

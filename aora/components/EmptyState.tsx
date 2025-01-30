@@ -28,7 +28,6 @@ const EmptyState: React.FC<EmptyStateProps> = ({ title, subTitle }) => {
         handlePress={() => router.push("/create")}
         containerStyles="w-full my-5"
         textStyles=""
-        isLoading={isSubmitting}
       />
     </View>
   )
