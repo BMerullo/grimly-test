@@ -7,8 +7,9 @@ import Trending from "@/components/Trending"
 import EmptyState from "@/components/EmptyState"
 import VideoCard from "@/components/VideoCard"
 import { RefreshControl } from "react-native-gesture-handler"
-import { getAllPosts } from "@/lib/appwrite"
+import { getAllPosts, getLatestPosts } from "@/lib/appwrite"
 import useAppwrite from "@/lib/useAppwrite"
+import Movie from "@/components/Test"
 
 interface Item {
   id: number
@@ -26,6 +27,8 @@ interface Error {
 const Home = () => {
   const { data: posts, refetch } = useAppwrite({ fn: getAllPosts })
 
+  const { data: latestPosts } = useAppwrite({ fn: getLatestPosts })
+
   const [refreshing, setRefreshing] = useState(false)
 
   const onRefresh = async () => {
@@ -34,7 +37,7 @@ const Home = () => {
     setRefreshing(false)
   }
 
-  console.log(posts)
+  // console.log(posts)
 
   // const data: Item[] = [
   //   { id: 1, $id: "1" },
@@ -85,7 +88,7 @@ const Home = () => {
               <Text className="text-gray-100 text-lg font-pregular mb-3">
                 Latest Videos
               </Text>
-              <Trending posts={posts} />
+              <Trending posts={latestPosts ?? []} />
             </View>
           </View>
         )}
