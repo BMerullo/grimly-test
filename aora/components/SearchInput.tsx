@@ -1,17 +1,27 @@
-import { View, Text, TouchableOpacity, Image, TextInput } from "react-native"
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Alert,
+} from "react-native"
 import React, { useState } from "react"
 import { icons } from "../constants"
+import { router, usePathname } from "expo-router"
 
 interface SearchInputProps {
-  title: string
-  value: string
-  placeholder: string
-  handleChangeText: (text: string) => void
-  otherStyles: string
-  keyboardType: string
+  title?: string
+  value?: string
+  placeholder?: string
+  handleChangeText?: (text: string) => void
+  otherStyles?: string
+  keyboardType?: string
+  initialQuery?: string
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
+  initialQuery,
   title,
   value,
   placeholder,
@@ -21,7 +31,10 @@ const SearchInput: React.FC<SearchInputProps> = ({
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
+
+  // const [showPassword, setShowPassword] = useState(false)
+  const pathname = usePathname()
+  const [query, setQuery] = useState(initialQuery || "")
 
   return (
     <View
@@ -30,17 +43,29 @@ const SearchInput: React.FC<SearchInputProps> = ({
       }`}
     >
       <TextInput
-        className="text-base mt-0.5 text-white flex-1 font-pregular"
-        value={value}
-        placeholder={placeholder}
-        placeholderTextColor="#7b7b8b"
-        onChangeText={handleChangeText}
+        className={`text-base mt-0.5 text-white flex-1 font-pregular ${
+          isFocused ? "border-secondary" : "border-black-200 space-x-4"
+        }`}
+        value={query}
+        placeholder="Search for a video topic"
+        placeholderTextColor="#CDCDE0)"
+        onChangeText={(e) => setQuery(e)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        secureTextEntry={title === "Password" && !showPassword}
       />
 
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          if (!query) {
+            return Alert.alert(
+              "Missing query",
+              "Please input something to search results across database"
+            )
+          }
+          if (pathname.startsWith("/search")) router.setParams({ query })
+          else router.push(`/search/${query}`)
+        }}
+      >
         <Image source={icons.search} className="w-5 h-5" resizeMode="contain" />
       </TouchableOpacity>
     </View>

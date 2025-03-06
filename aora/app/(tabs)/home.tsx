@@ -9,7 +9,6 @@ import VideoCard from "@/components/VideoCard"
 import { RefreshControl } from "react-native-gesture-handler"
 import { getAllPosts, getLatestPosts } from "@/lib/appwrite"
 import useAppwrite from "@/lib/useAppwrite"
-import Movie from "@/components/Test"
 
 interface Item {
   id: number

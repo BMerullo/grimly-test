@@ -1,6 +1,8 @@
 import { View, Text, Image, TouchableOpacity } from "react-native"
 import React, { useState } from "react"
 import { icons } from "@/constants"
+import { useVideoPlayer, VideoSource, VideoView } from "expo-video"
+import { useEvent } from "expo"
 
 interface VideoCardProps {
   video: video
@@ -27,6 +29,16 @@ const VideoCard: React.FC<VideoCardProps> = ({
   },
 }) => {
   const [play, setPlay] = useState(false)
+
+  const videoSource: VideoSource = video
+
+  const player = useVideoPlayer(videoSource, (player) => {
+    player.loop = true
+  })
+
+  const { isPlaying } = useEvent(player, "playingChange", {
+    isPlaying: player.playing,
+  })
 
   return (
     <View className="flex-col items-center px-4 mb-14">
@@ -58,13 +70,33 @@ const VideoCard: React.FC<VideoCardProps> = ({
           <Image source={icons.menu} className="w-5 h-5" resizeMode="contain" />
         </View>
       </View>
-      {play ? (
-        <Text className="text-white">Playing</Text>
+      {isPlaying ? (
+        <View className="w-full h-60 rounded-xl mt-3 relative justify-center items-center">
+          <VideoView
+            // className=" rounded-[33px] mt-3 bg-white/10 absolute border"
+            style={{
+              width: "100%",
+              height: 200,
+            }}
+            player={player}
+            allowsFullscreen
+            allowsPictureInPicture
+            contentFit="contain"
+          />
+        </View>
       ) : (
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={() => setPlay(true)}
-          className="w-full h-60 rounded-xl mt-3 relative justify-center items-center "
+          onPress={() => {
+            if (isPlaying) {
+              setPlay(false)
+              player.pause()
+            } else {
+              setPlay(true)
+              player.play()
+            }
+          }}
+          className="w-full h-60 rounded-xl mt-3 relative justify-center items-center"
         >
           <Image
             source={{ uri: thumbnail }}
