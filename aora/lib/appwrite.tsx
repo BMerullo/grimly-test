@@ -50,9 +50,9 @@ export interface DBUser {
   email: string
   username: string
   avatar: string
-  $id: string // Appwrite's document ID
-  $createdAt: string // Document creation timestamp
-  $updatedAt: string // Document update timestamp
+  $id?: any // Appwrite's document ID
+  $createdAt?: string // Document creation timestamp
+  $updatedAt?: string // Document update timestamp
 }
 
 export const createUser = async (
@@ -161,6 +161,26 @@ export const searchPosts = async (query: string): Promise<any[]> => {
       Query.contains("Title", query),
     ])
     return posts.documents
+  } catch (error) {
+    throw new Error(error as string)
+  }
+}
+
+export const getUserPosts = async (userId: string) => {
+  try {
+    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+      Query.equal("users", userId),
+    ])
+    return posts.documents
+  } catch (error) {
+    throw new Error(error as string)
+  }
+}
+
+export const signOut = async () => {
+  try {
+    const session = await account.deleteSession("current")
+    return session
   } catch (error) {
     throw new Error(error as string)
   }

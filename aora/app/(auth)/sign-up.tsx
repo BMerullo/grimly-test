@@ -7,8 +7,10 @@ import { createUser } from "../../lib/appwrite"
 
 import { images } from "../../constants"
 import FormField from "@/components/FormField"
+import { useGlobalContext } from "@/context/GlobalProvider"
 
 const SignUp = () => {
+  const { setUser, setIsLoggedIn } = useGlobalContext()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setForm] = useState({
     username: "",
@@ -24,9 +26,14 @@ const SignUp = () => {
     setIsSubmitting(true)
 
     try {
-      const result = await createUser(form.email, form.password, form.username)
+      const result = await createUser(
+        form.email as string,
+        form.password as string,
+        form.username as string
+      )
 
-      // set it to global state...
+      setUser(result)
+      setIsLoggedIn(true)
 
       router.replace("/home")
     } catch (error) {

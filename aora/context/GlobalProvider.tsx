@@ -54,7 +54,7 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
       .finally(() => {
         setIsLoading(false)
       })
-  }, [])
+  }, [isLoggedIn])
 
   return (
     <GlobalContext.Provider

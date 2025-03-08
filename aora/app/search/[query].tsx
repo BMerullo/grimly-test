@@ -1,12 +1,9 @@
 import { View, Text, FlatList, Image, Alert } from "react-native"
 import React, { useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
-
 import SearchInput from "@/components/SearchInput"
-
 import EmptyState from "@/components/EmptyState"
 import VideoCard from "@/components/VideoCard"
-
 import { searchPosts } from "@/lib/appwrite"
 import useAppwrite from "@/lib/useAppwrite"
 import { useLocalSearchParams } from "expo-router"
